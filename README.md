@@ -1,3 +1,6 @@
+Lightspeed-PHP framework
+========================
+
 ![Lightspeed-PHP logo](http://lightspeed-php.com/images/logo.png "Lightspeed-PHP")
 
 **LIGHTSPEED-PHP IS A MINIMALISTIC AND FAST PHP FRAMEWORK** aiming to provide basic structure that helps you build your applications faster and more efficiently on solid architecture. It's designed to be small, fast, easy to understand and extend.
@@ -9,7 +12,7 @@ I have used several frameworks in my time and designed a few before. While there
 
 Every part of the system has been designed **with performance in mind** and caching is used internally and also provided for simple use to the user, using both APC and Memcache solutions.
 
-It's licenced under the **very permissive MIT licence** so you can do pretty much anything with it.
+It's licenced under the **very permissive [MIT licence](http://en.wikipedia.org/wiki/MIT_License)** so you can do pretty much anything with it.
 
 
 FEATURES
