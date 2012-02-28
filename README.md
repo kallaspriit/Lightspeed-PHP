@@ -4,7 +4,7 @@
 
 
 WHY ANOTHER FRAMEWORK?
-======================
+----------------------
 I have used several frameworks in my time and designed a few before. While there are other great libraries out there like the Zend Framework, they are **often bloated, slow and hard to understand** and thus extend. Lightspeed is down to business and you can go over the whole core code of it in a coffee-break time. It still has all the main features you would expect from a framework and its **structured similarly to Zend Framework** so anyone from that background will have no problem understanding it quickly.
 
 Every part of the system has been designed **with performance in mind** and caching is used internally and also provided for simple use to the user, using both APC and Memcache solutions.
@@ -13,7 +13,7 @@ It's licenced under the **very permissive MIT licence** so you can do pretty muc
 
 
 FEATURES
-========
+--------
 Lightspeed PHP is **Model-View-Controller** design pattern oriented. The main tasks it solves are the following:
 
 * Bootstrap the application
@@ -32,10 +32,10 @@ If you’re into performance and scalability like me, you might want to check out 
 
 
 GETTING STARTED
-===============
+---------------
 Starting with Lightspeed PHP is easy, just download the framework and you will have a hello world application running. You may then want to check out [the tutorial](http://lightspeed-php.com/tutorial), that aims to teach you the core concepts to get up and running quickly. When you need specific help about some components, check out [the manual](http://lightspeed-php.com/manual) explaining how to use and extend each part of the system. There is also a low-level [reference](http://lightspeed-php.com/reference) generated from the source code, explaining every method.
 
 
 LICENCE
-=======
+-------
 Lightspeed-PHP is **free open-source software** licenced under the very permissive **MIT licence** which generally means that you can do pretty much anything you like with it.
