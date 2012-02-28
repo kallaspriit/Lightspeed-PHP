@@ -4,7 +4,7 @@ LIGHTSPEED-PHP IS A MINIMALISTIC AND FAST PHP FRAMEWORK aiming to provide basic 
 
 
 WHY ANOTHER FRAMEWORK?
-I have used several frameworks in my time and designed a few before. While there are other great libraries out there like the Zend Framework, they are often bloated, slow and hard to understand and thus extend. Lightspeed is down to business and you can go over the whole core code of it in a coffee-break time. It still has all the main features you would expect from a framework and its structured similarly to Zend's so anyone from that background will have no problem understanding it quickly.
+I have used several frameworks in my time and designed a few before. While there are other great libraries out there like the Zend Framework, they are often bloated, slow and hard to understand and thus extend. Lightspeed is down to business and you can go over the whole core code of it in a coffee-break time. It still has all the main features you would expect from a framework and its structured similarly to Zend Framework so anyone from that background will have no problem understanding it quickly.
 
 Every part of the system has been designed with performance in mind and caching is used internally and also provided for simple use to the user, using both APC and Memcache solutions.
 
