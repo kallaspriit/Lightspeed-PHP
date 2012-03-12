@@ -46,6 +46,7 @@ One aim of the project is to keep the core of Lightspeed PHP framework as compac
 Below is a list of official add-ons:
 
 * [PdoModel database access layer](https://github.com/kallaspriit/Lightspeed-PHP-PdoModel-Addon)
+* [Paginator simple pager](https://github.com/kallaspriit/Lightspeed-PHP-Paginator-Addon)
 
 Should you build something cool then let we know and it will be listed here
 
