@@ -39,6 +39,16 @@ GETTING STARTED
 Starting with Lightspeed PHP is easy, just download the framework and you will have a hello world application running. You may then want to check out [the tutorial](http://lightspeed-php.com/tutorial), that aims to teach you the core concepts to get up and running quickly. When you need specific help about some components, check out [the manual](http://lightspeed-php.com/manual) explaining how to use and extend each part of the system. There is also a low-level [reference](http://lightspeed-php.com/reference) generated from the source code, explaining every method.
 
 
+ADDONS
+------
+One aim of the project is to keep the core of Lightspeed PHP framework as compact as possible not to litter it with functionality that you might not need. For this reason any non-essential functionality such as database layers are maintained as seperate projects and you may choose to use something else.
+
+Below is a list of official add-ons:
+* [PdoModel database access layer](https://github.com/kallaspriit/Lightspeed-PHP-PdoModel-Addon)
+
+Should you build something cool then let we know and it will be listed here
+
+
 LICENCE
 -------
 Lightspeed-PHP is **free open-source software** licenced under the very permissive **MIT licence** which generally means that you can do pretty much anything you like with it.
