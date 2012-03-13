@@ -128,6 +128,16 @@ class Router extends RouterBase {
 	/**
 	 * Returns a route to a controller action that handles requesting a
 	 * controller action that does not exist.
+	 * 
+	 * This can be used to handle requests that you don't have routes for. For
+	 * example lets say that you have content management system where user adds
+	 * a new page "Contact us" and you'd like to make this page available on
+	 * "/contact-us" without dynamically creating routes. As this request would
+	 * not match any of the existing routes, it is passed to this method which
+	 * might decide to return a route that points to some arbitrary controller
+	 * action, passing along the request. Should some invalid /foobar path be
+	 * requested, you can just return null and an error message will eventually
+	 * be generated.
 	 *
 	 * @param HttpRequest $request The invalid request
 	 * @return Route Route to controller action not found handler action
@@ -135,18 +145,19 @@ class Router extends RouterBase {
 	public function getSpecialRoute(
 		HttpRequest $request
 	) {
+		/*
 		$requestedUrl = trim($request->getRoutePath(),'/');
 		
 		$requestedPages = explode('/', $requestedUrl);
 		$requestedPage = $requestedPages[0];
 
 		// check whether page exists, use service or something..
-		if (!empty($requestedPage) && MenuService::checkIfMenuExistsByDynamicUrl($requestedPage)) {
+		if (!empty($requestedPage) && MenuService::dynamicUrlExists($requestedPage)) {
 			$route = new RouteBase(
-				'page', // not really important
+				'page',  // not really important
 				'/page', // not really important either
-				'page',
-				'show'
+				'page',  // PageController
+				'show'   // showAction()
 			);
 
 			$route->setParams(array(
@@ -156,6 +167,7 @@ class Router extends RouterBase {
 			
 			return $route;
 		}
+		*/
 		
 		return null;
 	}
