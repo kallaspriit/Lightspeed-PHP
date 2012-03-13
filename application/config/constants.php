@@ -5,7 +5,7 @@
 /**
  * Timezone to use for date-related operations
  */
-define('LS_TIMEZONE', 'Europe/Tallinn');
+define('LS_TIMEZONE', 'UTC');
 
 /**
  * Encoding to use when dealing with multibyte string manipulation
@@ -57,17 +57,10 @@ define('LS_CACHE_GLOBAL', 'global');
 
 /**
  * English language id
+ * 
+ * You can add more languages in the same manner.
  */
 define('LANGUAGE_ENGLISH', 1);
-
-
-/**
- * Estonian language id
- *
- * Replace with anything you like or add new ones. Or you can remove them
- * all-together, make sure to update the Bootstrapper too.
- */
-define('LANGUAGE_ESTONIAN', 2);
 
 /**
  * The default language
