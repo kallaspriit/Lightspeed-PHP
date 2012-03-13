@@ -41,14 +41,6 @@ function __autoload($className) {
 		require_once SERVICES_PATH.'/'.$className.'.php';
 	} else if ($className == 'Validator') {
 		require_once APPLICATION_PATH.'/Validator.php';
-	} else if ($className == 'Paginator') {
-		require_once LIBRARY_PATH.'/paginator/Paginator.php';
-	} else if ($className == 'JsonResponse') {
-		require_once LIBRARY_PATH.'/json/JsonResponse.php';
-	} else if ($className == 'WebServiceResponse') {
-		require_once LIBRARY_PATH.'/json/WebServiceResponse.php';
-	} else if ($className == 'Mailer') {
-		require_once LIBRARY_PATH.'/mailer/Mailer.php';
 	} else if ($className == 'Util') {
 		require_once APPLICATION_PATH.'/Util.php';
 	}
