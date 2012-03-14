@@ -47,8 +47,9 @@ Below is a list of official add-ons:
 
 * [PdoModel database access layer](https://github.com/kallaspriit/Lightspeed-PHP-PdoModel-Addon)
 * [Paginator simple pager](https://github.com/kallaspriit/Lightspeed-PHP-Paginator-Addon)
+* [AJAX JSON response helper](https://github.com/kallaspriit/Lightspeed-PHP-Json-Addon)
 
-Should you build something cool then let we know and it will be listed here
+Should you build something cool then let we know and it will be listed here.
 
 
 LICENCE
