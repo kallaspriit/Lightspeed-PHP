@@ -65,7 +65,7 @@ class DummyCacheStrategy extends CacheStrategy {
 	 * @param mixed $default The value to return if cache is missed
 	 * @return mixed Cached value or the default
 	 */
-	public function fetch($key, $default = false) {
+	public function fetch($key, $default = null) {
 		return $default;
 	}
 
