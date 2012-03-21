@@ -69,7 +69,7 @@ class Debug {
 				$data = '+'.str_repeat('-', 98).'+'.PHP_EOL;
 
 				if (!empty($name)) {
-					$data .= sprintf('| %-76s %s |', $name, date('Y-m-d H:i:s')).PHP_EOL;
+					$data .= sprintf('| %-76s %s |', $name, date('d.m.Y H:i:s')).PHP_EOL;
 					$data .= '+'.str_repeat('-', 98).'+'.PHP_EOL;
 				}
 
@@ -127,17 +127,13 @@ class Debug {
 	}
 	
 	public static function formatException(Exception $e) {
-		$out = get_class($e).($e->getCode() != 0 ? ' ['.$e->getCode().']' : '').PHP_EOL;
-		$out .= '> Message: '.$e->getMessage().PHP_EOL;
-		$out .= '> Location: '.$e->getFile().': '.$e->getLine().PHP_EOL;
+		$out = get_class($e).' "'.$e->getMessage().'"'.($e->getCode() != 0 ? ' ['.$e->getCode().']' : '').PHP_EOL;
 		
 		$trace = $e->getTrace();
 		
 		if (!empty($trace)) {
-			$out .= '> Trace: '.PHP_EOL;
-			
 			foreach ($trace as $key => $item) {
-				$out .= '  #'.($key + 1).' '.(isset($item['file']) ? $item['file'].': '.$item['line'] : 'unknown file').PHP_EOL;
+				$out .= '  #'.(count($trace) - $key).' '.(isset($item['file']) ? $item['file'].': '.$item['line'] : $e->getFile().': '.$e->getLine()).PHP_EOL;
 				$out .= '    '.(!empty($item['class']) ? $item['class'].$item['type'] : '').$item['function'];
 				
 				if (!empty($item['args'])) {
@@ -200,9 +196,9 @@ class Debug {
 			}
 			
 			try {
-				$out .= self::stringify($key).': \''.self::stringify($value).'\'';
+				$out .= self::stringify($key).': '.self::stringify($value);
 			} catch (Exception $e) {
-				$out .= self::stringify($key) .': \''.self::stringify($value).'\'';
+				$out .= self::stringify($key) .': '.self::stringify($value);
 			}
 		}
 		
@@ -213,7 +209,8 @@ class Debug {
 		if (is_array($var)) {
 			return self::formatArray($var);
 		} else if (is_object($var)) {
-			return 'instance of '.get_class($var);
+			$members = get_object_vars($var);
+			return 'instance of '.get_class($var).' '.self::formatArray($members);
 		} else if (is_numeric($var)) {
 			return $var;
 		} else {
