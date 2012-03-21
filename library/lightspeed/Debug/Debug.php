@@ -59,24 +59,43 @@ class Debug {
 	 * @param boolean $alsoOutput Should dump be outputed even when using file
 	 * @param boolean $ignoreDebugMode Should method apply even if debug is off
 	 */
-	public static function dump($var, $name = 'Debug dump', $filename = null, $truncateFile = false, $alsoOutput = false, $ignoreDebugMode = false) {
-		if (!empty($filename) && substr($filename, 0, 1) == '*' && defined('LOG_PATH')) {
+	public static function dump(
+		$var,
+		$name = 'Debug dump',
+		$filename = null,
+		$truncateFile = false,
+		$alsoOutput = false,
+		$ignoreDebugMode = false
+	) {
+		if (
+			!empty($filename)
+			&& substr($filename, 0, 1) == '*'
+			&& defined('LOG_PATH')
+		) {
 			$filename = LOG_PATH.'/'.substr($filename, 1);
 		}
 		
 		if (LS_DEBUG || $ignoreDebugMode) {
 			if (!empty($filename)) {
-				$data = '+'.str_repeat('-', 98).'+'.PHP_EOL;
+				$data = '+'.str_repeat('-', 78).'+'.PHP_EOL;
 
 				if (!empty($name)) {
-					$data .= sprintf('| %-76s %s |', $name, date('d.m.Y H:i:s')).PHP_EOL;
-					$data .= '+'.str_repeat('-', 98).'+'.PHP_EOL;
+					$data .= sprintf(
+						'| %-56s %s |',
+						$name,
+						date('d.m.Y H:i:s')
+					).PHP_EOL;
+					
+					$data .= '+'.str_repeat('-', 78).'+'.PHP_EOL;
 				}
 
 				$backtrace = debug_backtrace();
 
 				if (!empty($backtrace[0])) {
-					$data .= sprintf(' %98s ', $backtrace[0]['file'].': '.$backtrace[0]['line']).PHP_EOL.PHP_EOL;
+					$data .= sprintf(
+						' %78s ',
+						$backtrace[0]['file'].': '.$backtrace[0]['line']
+					).PHP_EOL.PHP_EOL;
 				}
 				
 				if ($var instanceof Exception) {
@@ -88,19 +107,24 @@ class Debug {
 				} else if (empty($var)) {
 					$data .= 'EMPTY';
 				} else {
-					$data .= print_r($var, true);
+					$data .= str_replace("\n", PHP_EOL, print_r($var, true));
 				}
 				
 				$data .= PHP_EOL.PHP_EOL.PHP_EOL;
 				
-				file_put_contents($filename, $data, !$truncateFile ? FILE_APPEND : null);
+				file_put_contents(
+					$filename,
+					$data,
+					!$truncateFile ? FILE_APPEND : null
+				);
 			}
 
 			if (empty($filename) || $alsoOutput) {
 				echo '<br clear="all"/>';
 
 				if (!empty($name)) {
-					echo '<fieldset class="debug-dump"><legend>'.$name.'</legend>';
+					echo '<fieldset class="debug-dump"><legend>'.
+						$name.'</legend>';
 				}
 
 				echo '<pre>';
@@ -210,7 +234,8 @@ class Debug {
 			return self::formatArray($var);
 		} else if (is_object($var)) {
 			$members = get_object_vars($var);
-			return 'instance of '.get_class($var).' '.self::formatArray($members);
+			
+			return 'instance of '.get_class($var).(!empty($members) ? ' '.self::formatArray($members) : '');
 		} else if (is_numeric($var)) {
 			return $var;
 		} else {
