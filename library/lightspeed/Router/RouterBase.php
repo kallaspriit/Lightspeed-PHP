@@ -247,8 +247,10 @@ class RouterBase {
 		// @codeCoverageIgnoreEnd
 
 		$url = '';
+		
+		$tokenCount = count($tokens);
 
-		foreach ($tokens as $token) {
+		foreach ($tokens as $tokenKey => $token) {
 			if (substr($token, 0, 1) == ':') {
 				$bracketPos = strpos($token, '[');
 				$parameterName = substr($token, 1);
@@ -260,7 +262,11 @@ class RouterBase {
 				if (isset($parameters[$parameterName])) {
 					$url .= '/'.$parameters[$parameterName];
 				} else {
-					if (!array_key_exists($parameterName, $defaults)) {
+					if (array_key_exists($parameterName, $defaults)) {
+						if ($tokenKey < $tokenCount - 1) {
+							$url .= '/'.$defaults[$parameterName];
+						}
+					} else {
 						throw new Exception(
 							'Missing route url parameter "'.$parameterName.'"'
 						);
@@ -282,7 +288,7 @@ class RouterBase {
 				$url .= '/'.$token;
 			}
 		}
-
+		
 		Cache::storeLocal($cacheKey, $url, LS_TTL_ROUTES);
 
 		return $url;
