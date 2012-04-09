@@ -104,7 +104,7 @@ class Debug {
 					$data .= $var === true ? 'TRUE' : 'FALSE';
 				} else if ($var === null) {
 					$data .= 'NULL';
-				} else if (empty($var)) {
+				} else if (!is_int($var) && empty($var)) {
 					$data .= 'EMPTY';
 				} else {
 					$data .= str_replace("\n", PHP_EOL, print_r($var, true));
@@ -135,7 +135,7 @@ class Debug {
 					echo $var === true ? '<em>TRUE</em>' : '<em>FALSE</em>';
 				} else if ($var === null) {
 					echo '<em>NULL</em>';
-				} else if (empty($var)) {
+				} else if (!is_int($var) && empty($var)) {
 					echo '<em>EMPTY</em>';
 				} else {
 					echo htmlspecialchars(print_r($var, true));
