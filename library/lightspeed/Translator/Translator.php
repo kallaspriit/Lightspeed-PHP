@@ -319,6 +319,16 @@ class Translator {
 
 		return call_user_func_array(array($instance, 'translate'), $parameters);
 	}
+	
+	/**
+	 * Returns whether a translation exists.
+	 * 
+	 * @param string $key The translation key to check
+	 * @return boolean Does the translation for given key exist
+	 */
+	public static function exists($key) {
+		return self::getInstance()->translationExists($key);
+	}
 
 	/**
 	 * Translates a translation key in currently active language and if a

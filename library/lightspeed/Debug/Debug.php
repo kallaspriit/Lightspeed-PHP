@@ -104,7 +104,7 @@ class Debug {
 					$data .= $var === true ? 'TRUE' : 'FALSE';
 				} else if ($var === null) {
 					$data .= 'NULL';
-				} else if (!is_int($var) && empty($var)) {
+				} else if (!is_int($var) && !is_float($var) && empty($var)) {
 					$data .= 'EMPTY';
 				} else {
 					$data .= str_replace("\n", PHP_EOL, print_r($var, true));
@@ -155,9 +155,39 @@ class Debug {
 		
 		$trace = $e->getTrace();
 		
+		$out .= self::formatTrace($trace, $e->getFile(), $e->getLine());
+		
+		$depth = 1;
+		
+		if (func_num_args() > 1) {
+			$depth = func_get_arg(1);
+		}
+		
+		$previous = $e->getPrevious();
+		
+		if (isset($previous)) {
+			$out .= '> Previous:'.PHP_EOL;
+			
+			$previousOut = self::formatException($previous, $depth + 1);
+			$lines = explode(PHP_EOL, $previousOut);
+			$paddedPreviousOut = '';
+			
+			foreach ($lines as $line) {
+				$paddedPreviousOut .= str_repeat(' ', $depth * 2).$line.PHP_EOL;
+			}
+			
+			$out .= $paddedPreviousOut.PHP_EOL;
+		}
+		
+		return $out;
+	}
+	
+	public static function formatTrace(array $trace, $file = null, $line = null) {
+		$out = '';
+		
 		if (!empty($trace)) {
 			foreach ($trace as $key => $item) {
-				$out .= '  #'.(count($trace) - $key).' '.(isset($item['file']) ? $item['file'].': '.$item['line'] : $e->getFile().': '.$e->getLine()).PHP_EOL;
+				$out .= '  #'.(count($trace) - $key).' '.(isset($item['file']) ? $item['file'].': '.$item['line'] : $file.': '.$line).PHP_EOL;
 				$out .= '    '.(!empty($item['class']) ? $item['class'].$item['type'] : '').$item['function'];
 				
 				if (!empty($item['args'])) {
@@ -184,28 +214,6 @@ class Debug {
 					$out .= '()'.PHP_EOL;
 				}
 			}
-		}
-		
-		$depth = 1;
-		
-		if (func_num_args() > 1) {
-			$depth = func_get_arg(1);
-		}
-		
-		$previous = $e->getPrevious();
-		
-		if (isset($previous)) {
-			$out .= '> Previous:'.PHP_EOL;
-			
-			$previousOut = self::formatException($previous, $depth + 1);
-			$lines = explode(PHP_EOL, $previousOut);
-			$paddedPreviousOut = '';
-			
-			foreach ($lines as $line) {
-				$paddedPreviousOut .= str_repeat(' ', $depth * 2).$line.PHP_EOL;
-			}
-			
-			$out .= $paddedPreviousOut.PHP_EOL;
 		}
 		
 		return $out;

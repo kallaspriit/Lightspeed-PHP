@@ -211,7 +211,7 @@ class PdoSessionStrategy implements SessionStrategy {
 		setcookie(
 			$this->cookieName,
 			$this->sessionId,
-			time() + $this->cookieParams['lifetime'],
+			$this->cookieParams['lifetime'] > 0 ? time() + $this->cookieParams['lifetime'] : 0,
 			$this->cookieParams['path'],
 			$this->cookieParams['domain'],
 			$this->cookieParams['secure'],
@@ -245,7 +245,7 @@ class PdoSessionStrategy implements SessionStrategy {
 	 * Generates and starts using a new session id.
 	 */
 	public function useNewId() {
-		$sessionId = sha1(uniqid('', true));
+		$sessionId = sha1(md5(uniqid('', true)));
 
 		$this->setId($sessionId);
 	}

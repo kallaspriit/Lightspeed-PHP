@@ -152,7 +152,7 @@ class BuiltinSessionStrategy implements SessionStrategy {
 		setcookie(
 			$this->cookieName,
 			$this->sessionId,
-			time() + $this->cookieParams['lifetime'],
+			$this->cookieParams['lifetime'] > 0 ? time() + $this->cookieParams['lifetime'] : 0,
 			$this->cookieParams['path'],
 			$this->cookieParams['domain'],
 			$this->cookieParams['secure'],
@@ -173,7 +173,7 @@ class BuiltinSessionStrategy implements SessionStrategy {
 			if (!empty($_COOKIE[$this->cookieName])) {
 				$this->sessionId = $_COOKIE[$this->cookieName];
 			} else {
-				$sessionId = uniqid('', true);
+				$sessionId = md5(uniqid('', true));
 
 				self::setId($sessionId);
 			}
