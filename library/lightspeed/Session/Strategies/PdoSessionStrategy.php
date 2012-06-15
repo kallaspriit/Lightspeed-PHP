@@ -2,7 +2,7 @@
 /**
  * Lightspeed high-performance hiphop-php optimized PHP framework
  *
- * Copyright (C) <2012> by <Priit Kallas>
+ * Copyright (C) <2011> by <Priit Kallas>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @author Priit Kallas <kallaspriit@gmail.com>
+ * @id $Id: PdoModel.php 57 2011-02-13 12:36:08Z kallaspriit $
+ * @author $Author: kallaspriit $
+ * @version $Revision: 57 $
+ * @modified $Date: 2011-02-13 14:36:08 +0200 (Sun, 13 Feb 2011) $
  * @package Lightspeed
  * @subpackage Session
  */
 
 // Require used classes
-require_once LIGHTSPEED_PATH.'/Session/SessionStrategy.php';
+require_once LIBRARY_PATH.'/session/SessionStrategy.php';
 
 /**
  * Enables storing data in persistent session across queries using a PDO
  * database connection.
  *
- * @author Priit Kallas <kallaspriit@gmail.com>
+ * @id $Id: PdoModel.php 57 2011-02-13 12:36:08Z kallaspriit $
+ * @author $Author: kallaspriit $
+ * @version $Revision: 57 $
+ * @modified $Date: 2011-02-13 14:36:08 +0200 (Sun, 13 Feb 2011) $
  * @package Lightspeed
  * @subpackage Session
  */
@@ -59,6 +65,13 @@ class PdoSessionStrategy implements SessionStrategy {
 		'secure' => false,
 		'httponly' => false,
 	);
+	
+	/**
+	 * How many seconds the session is valid.
+	 * 
+	 * @var integer 
+	 */
+	protected $expireTime;
 
 	/**
 	 * Name of the cookie to use to store session identifier.
@@ -109,24 +122,62 @@ class PdoSessionStrategy implements SessionStrategy {
 	 * 
 	 * @param PDO $db Database connection to use.
 	 * @param string $sessionId Optional session id to use
-	 * @param int $lifetime Session lifetime
+	 * @param int $cookieLifetime Session lifetime
 	 */
-	public function __construct(PDO $db, $sessionId = null, $lifetime = 0) {
+	public function __construct(
+		PDO $db,
+		$sessionId = null,
+		$cookieLifetime = 0,
+		$expireTime = 1800
+	) {
 		$this->db = $db;
-		$this->cookieParams['lifetime'] = $lifetime;
+		$this->cookieParams['lifetime'] = $cookieLifetime;
+		$this->expireTime = $expireTime;
 		$this->model = new SessionModel($this->db);
 		
-		if ($sessionId !== null) {
+		if (!empty($sessionId)) {
 			$this->setId($sessionId);
 		}
 		
-		$result = $this->model->_loadWhere(array(
-			'id' => $this->getId(),
-			'expire_datetime:>' => new SqlExpr('NOW()')
+		$sessionInfo = PdoModel::fetchOne('
+			SELECT
+				*
+			FROM
+				`session`
+			WHERE
+				`id` = :id
+				AND (
+					`expire_datetime` > NOW()
+					OR `expire_datetime` IS NULL
+				)
+		', array(
+			'id' => $this->getId()
 		));
 		
-		if ($result !== false) {
-			$this->values = unserialize($this->model->data);
+		if (!empty($sessionInfo)) {
+			$this->model->populate(array(
+				'id' => $sessionInfo['id'],
+				'user_id' => $sessionInfo['user_id'],
+				'start_datetime' => $sessionInfo['start_datetime'],
+				'expire_datetime' => $sessionInfo['expire_datetime'],
+				'data' => $sessionInfo['data']
+			));
+
+			$this->values = unserialize($sessionInfo['data']);
+			
+			if (isset($this->values['__SESSION_EXPIRE'])) {
+				$expireTime = intval($this->values['__SESSION_EXPIRE'])
+					+ $this->expireTime;
+
+				if ($expireTime < time()) {
+					$this->useNewId();
+				}
+			}
+			
+			if ($this->values === false) {
+				$this->values = array();
+			}
+			
 			$this->isFirstLoad = false;
 		} else {
 			$this->values = array();
@@ -147,6 +198,9 @@ class PdoSessionStrategy implements SessionStrategy {
 		}
 
 		if ($this->extend || $this->isFirstLoad) {
+			$this->values['__SESSION_EXPIRE'] = time()
+					+ $this->expireTime;
+			
 			$this->model->expire_datetime = $this->cookieParams['lifetime'] > 0
 				? new SqlExpr(
 						'NOW() + INTERVAL '.$this->cookieParams['lifetime'].
@@ -207,7 +261,7 @@ class PdoSessionStrategy implements SessionStrategy {
 	 */
 	public function setId($sessionId) {
 		$this->sessionId = $sessionId;
-		
+
 		setcookie(
 			$this->cookieName,
 			$this->sessionId,
